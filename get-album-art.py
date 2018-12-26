@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Download the album art from your Spotify library."""
+import argparse
 import spotipy
 import spotipy.util
 import requests
@@ -9,13 +11,11 @@ INVALID_CHARS = ["<", ">", ":", '"', "/", "\\", "|", "?", "*"]
 
 
 def main():
-    scope = "user-library-read"
-    username = ""
-    client_id = ""
-    client_secret = ""
-    redirect_uri = "http://localhost:8080/callback"
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("username", help="Spotify username (or email address)")
+    args = parser.parse_args()
 
-    token = spotipy.util.prompt_for_user_token(username, scope, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    token = spotipy.util.prompt_for_user_token(args.username, "user-library-read")
 
     sp = spotipy.Spotify(auth=token)
     album_art = {}
