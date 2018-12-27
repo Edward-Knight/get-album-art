@@ -6,8 +6,7 @@ import spotipy.util
 import requests
 import shutil
 import os
-
-INVALID_CHARS = ["<", ">", ":", '"', "/", "\\", "|", "?", "*"]
+import re
 
 
 def main():
@@ -43,10 +42,8 @@ def main():
     successes = 0
     print("Found", total, "albums, now downloading...")
     for title, url in album_art.items():
-        path = title
-        for c in INVALID_CHARS:
-            path = path.replace(c, "_")
-        path += ".jpg"
+        # replace some special characters with underscores
+        path = re.sub(r'[<>:"/\\|?*]', "_", title) + ".jpg"
         if os.path.exists(path):
             print("File already exists, skipping", path)
             skipped += 1
